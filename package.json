@@ -1,6 +1,7 @@
 {
   "name": "poligami-api",
   "version": "1.0.0",
+  "type": "module",
   "main": "api/submit.js",
   "dependencies": {
     "express": "^4.18.2",
