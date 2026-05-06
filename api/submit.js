@@ -25,7 +25,7 @@ app.post('/api/submit', async (req, res) => {
       body: JSON.stringify({
         sender: { name: process.env.FROM_NAME, email: process.env.FROM_EMAIL },
         to: [{ email: process.env.NOTIFY_EMAIL, name: process.env.NOTIFY_NAME }],
-        subject: `[Poligami.my] Pendaftaran Baru — ${nama}`,
+        subject: `[Poligami.my] Pendaftaran Baharu — ${nama}`,
         htmlContent: `
           <div style="font-family:Georgia,serif;max-width:520px;margin:0 auto;border:1px solid #e0e0e0;">
             <div style="background:#111;padding:20px 28px;">
