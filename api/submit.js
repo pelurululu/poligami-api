@@ -1,8 +1,11 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+import express from 'express';
+import cors from 'cors';
 
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.post('/api/submit', async (req, res) => {
   const { kategori, nama, whatsapp, negeri } = req.body;
 
   if (!kategori || !nama || !whatsapp || !negeri) {
@@ -20,10 +23,7 @@ export default async function handler(req, res) {
         'api-key': process.env.BREVO_API_KEY,
       },
       body: JSON.stringify({
-        sender: {
-          name: process.env.FROM_NAME,
-          email: process.env.FROM_EMAIL,
-        },
+        sender: { name: process.env.FROM_NAME, email: process.env.FROM_EMAIL },
         to: [{ email: process.env.NOTIFY_EMAIL, name: process.env.NOTIFY_NAME }],
         subject: `[Poligami.my] Pendaftaran Baru — ${nama}`,
         htmlContent: `
@@ -46,7 +46,6 @@ export default async function handler(req, res) {
                   <td style="padding:12px 0;color:#888;">WhatsApp</td>
                   <td style="padding:12px 0;">
                     <a href="https://wa.me/${waClean}" style="color:#111;font-weight:600;text-decoration:none;">${whatsapp}</a>
-                    &nbsp;<span style="font-size:11px;color:#aaa;">(klik untuk buka WhatsApp)</span>
                   </td>
                 </tr>
                 <tr>
@@ -58,7 +57,7 @@ export default async function handler(req, res) {
                 <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#999;">Diterima pada: ${now}</p>
               </div>
             </div>
-          </div>`,
+          </div>`
       }),
     });
 
@@ -72,4 +71,7 @@ export default async function handler(req, res) {
     console.error('Brevo error:', err);
     return res.status(500).json({ error: err.message });
   }
-}
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
